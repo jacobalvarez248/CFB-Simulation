@@ -10,7 +10,7 @@ Upload your Schedule file and simulate the season X times.
 
 **Select the version:**
 - **JPR** = reads the 'Schedule' sheet
-- **Composite** = reads the 'industry schedule' sheet
+- **Composite** = reads the 'Industry Schedule' sheet
 
 You'll see each team's percent chance to:
 - Make the playoffs
@@ -23,7 +23,7 @@ uploaded_file = st.file_uploader("Upload your 'Preseason 2025.xlsm' Schedule fil
 # DROPDOWN FOR SCHEDULE VERSION
 sheet_selector = st.selectbox(
     "Select simulation data version:",
-    options=[("JPR", "Schedule"), ("Composite", "industry schedule")],
+    options=[("JPR", "Schedule"), ("Composite", "Industry Schedule")],
     format_func=lambda x: x[0],
 )
 selected_sheet_name = sheet_selector[1]
@@ -160,3 +160,4 @@ if uploaded_file:
 
 else:
     st.info("Please upload your schedule file to begin.")
+
