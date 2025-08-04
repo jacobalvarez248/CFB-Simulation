@@ -21,7 +21,11 @@ if uploaded_file:
 
     # --- Read and Clean Data ---
     schedule = pd.read_excel(uploaded_file, sheet_name="Schedule")
-    schedule['Win Prob'] = schedule['Win Prob'].str.rstrip('%').astype(float) / 100
+    if schedule['Win Prob'].dtype == 'float' or schedule['Win Prob'].dtype == 'int':
+        # already numeric
+        pass
+    else:
+        schedule['Win Prob'] = schedule['Win Prob'].astype(str).str.rstrip('%').astype(float) / 100
     schedule['Team'] = schedule['Team'].str.strip()
     schedule['Opponent'] = schedule['Opponent'].str.strip()
 
@@ -126,3 +130,4 @@ if uploaded_file:
 
 else:
     st.info("Please upload your schedule file to begin.")
+
