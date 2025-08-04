@@ -7,6 +7,11 @@ st.title("College Football Season Simulator")
 
 st.markdown("""
 Upload your Schedule file and simulate the season X times.
+
+**Select the version:**
+- **JPR** = reads the 'Schedule' sheet
+- **Composite** = reads the 'industry schedule' sheet
+
 You'll see each team's percent chance to:
 - Make the playoffs
 - Win their conference
@@ -15,11 +20,19 @@ You'll see each team's percent chance to:
 
 uploaded_file = st.file_uploader("Upload your 'Preseason 2025.xlsm' Schedule file", type=["xlsm", "xlsx"])
 
+# DROPDOWN FOR SCHEDULE VERSION
+sheet_selector = st.selectbox(
+    "Select simulation data version:",
+    options=[("JPR", "Schedule"), ("Composite", "industry schedule")],
+    format_func=lambda x: x[0],
+)
+selected_sheet_name = sheet_selector[1]
+
 if uploaded_file:
     N_SIMULATIONS = st.slider("Number of Simulations", min_value=100, max_value=10000, value=1000, step=100)
 
     # --- Read and Clean Data ---
-    schedule = pd.read_excel(uploaded_file, sheet_name="Schedule", engine="openpyxl")
+    schedule = pd.read_excel(uploaded_file, sheet_name=selected_sheet_name, engine="openpyxl")
     
     # Robust win prob cleaning (handles floats, ints, percents as strings)
     def winprob_clean(val):
@@ -47,7 +60,6 @@ if uploaded_file:
             team, opp = row['Team'], row['Opponent']
             win_prob = row['Win Prob']
             conf = row['Conference']
-            # Look up opponent's conference if possible
             try:
                 opp_conf = schedule[schedule['Team'] == opp]['Conference'].iloc[0]
             except IndexError:
